@@ -105,11 +105,15 @@ FOREIGN KEY ("file_id") REFERENCES "files"("id")
 ON DELETE CASCADE;
 
 -- to run seeds
-DELETE FROM products;
+DELETE FROM recipe_files;
+DELETE FROM recipes;
 DELETE FROM users;
+DELETE FROM chefs;
 DELETE FROM files;
 
 -- restart sequence auto_increment from tables id
-ALTER SEQUENCE products_id_seq RESTART WITH 1;
+ALTER SEQUENCE recipes_id_seq RESTART WITH 1;
 ALTER SEQUENCE users_id_seq RESTART WITH 1;
 ALTER SEQUENCE files_id_seq RESTART WITH 1;
+ALTER SEQUENCE recipe_files_id_seq RESTART WITH 1;
+ALTER SEQUENCE chefs_id_seq RESTART WITH 1;
