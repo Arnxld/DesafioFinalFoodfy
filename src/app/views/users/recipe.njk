@@ -1,0 +1,70 @@
+{% extends "users/layout.njk" %}
+
+{% block head %}
+    <title>{{recipe.title}} | Foodfy</title>
+{% endblock head %}
+
+{% block content %}
+    <div class="recipe-apresentation">
+        <div class="image-container">
+            <img src="{{recipe.image}}" alt="Imagem de {{recipe.title}}">
+        </div>
+        <div class="recipe-info">
+            <p class="recipe-title">{{recipe.title}}</p>
+            <p class="recipe-author">{{recipe.author}}</p>
+        </div>
+    </div>
+
+    <section class="recipe-description">
+
+        <div class = "block" id="ingredients">
+            <div class="description-header">
+                <h2>Ingredientes</h2>
+                <p class="hide">Esconder</p>
+            </div>
+            <div class="text">
+            <ul>
+                {% for ingredient in recipe.ingredients %}
+                <li>{{ingredient}}</li>
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+
+        <div class = "block" id="preparation">
+            <div class="description-header">
+                <h2>Modo de preparo</h2>
+                <p class="hide">Esconder</p>
+            </div>
+            <div class="text">
+            <ul>
+                {% for step in recipe.preparation %}
+                <li>{{step}}</li>
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+
+        <div class = "block" id="information">
+            <div class="description-header">
+                <h2>Informações adicionais</h2>
+                <p class="hide">Esconder</p>
+            </div>
+            <div class="text">
+            <p>{{recipe.information}}</p>
+            </div>
+        </div>
+      
+        <div>
+            atualizado em {{recipe.updated_at}}
+        </div>
+ 
+
+
+    </section>
+
+    <script src="/scripts.js"></script>
+
+
+
+{% endblock content %}
