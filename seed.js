@@ -67,4 +67,33 @@ async function createChefs() {
     await Promise.all(chefsPromises)
 }
 
+async function createRecipes() {
+    let recipes = []
+    const totalFiles = 20
+    let files = []
+
+    while (files.length < totalFiles) {
+        files.push({
+            filename: faker.image.image(),
+            path: `public/images/chefPlaceholder.png`
+        })
+    }
+
+    filesPromise = files.map(file => File.create(file))
+    filesIdsResults = await Promise.all(filesPromise)
+    filesIds = filesIdsResults.map(result => result.rows[0].id)
+
+
+
+    while(recipes.length < totalRecipes) {
+        recipes.push({
+            chef_id: Math.ceil(Math.random() * totalChefs),
+            title: faker.name.title(),
+            ingredients: [faker.random.word(), faker.random.word()],
+            preparation: [faker.random.words(), faker.random.words()],
+            information: faker.lorem.paragraph(Math.ceil(Math.random() * 10)),
+            user_id: Math.ceil(Math.random)
+        })
+    }
+}
 createChefs()
