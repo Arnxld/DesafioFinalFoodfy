@@ -29,7 +29,6 @@ async function createUsers() {
         const usersPromise = users.map(user => UserModel.create(user))
         createdUsers = await Promise.all(usersPromise)
         usersIds = createdUsers.map(user => user.id)
-        console.log(usersIds)
     }
     catch(err) {
         console.error(err)
@@ -75,7 +74,7 @@ async function createRecipes() {
     while (files.length < totalFiles) {
         files.push({
             filename: faker.image.image(),
-            path: `public/images/chefPlaceholder.png`
+            path: `public/images/recipePlaceholder.png`
         })
     }
 
@@ -87,13 +86,27 @@ async function createRecipes() {
 
     while(recipes.length < totalRecipes) {
         recipes.push({
-            chef_id: Math.ceil(Math.random() * totalChefs),
+            chef: Math.ceil(Math.random() * totalChefs),
             title: faker.name.title(),
             ingredients: [faker.random.word(), faker.random.word()],
             preparation: [faker.random.words(), faker.random.words()],
             information: faker.lorem.paragraph(Math.ceil(Math.random() * 10)),
-            user_id: Math.ceil(Math.random)
+            user_id: Math.ceil(Math.random() * totalUsers)
         })
-    }
+    } // 10 receitas
+
+    const recipesPromises = recipes.map(recipe => Recipe.create(recipe))
+    const recipesResults = await Promise.all(recipesPromises)
+    const recipesIds = recipesResults.map(result => result.rows[0].id) // 10 ids de receitas
+
+    for()
+
 }
-createChefs()
+
+async function init() {
+    await createUsers()
+    await createChefs()
+    await createRecipes()
+}
+
+init()
