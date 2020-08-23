@@ -9,7 +9,6 @@
         
 <div class="cards recipes">
     {% for recipe in recipes %}
-    {% if loop.index0 < 6 %}
         <div class="card" id="{{recipe.id}}">
             <section style="background: url('{{recipe.img}}') no-repeat center center / cover"></section>
             <div class="card-info">
@@ -17,7 +16,6 @@
                 <p class="recipe-author">por {{recipe.chef_name}}</p>
             </div>
         </div>
-    {% endif %}
     {% endfor %}
 </div>
 

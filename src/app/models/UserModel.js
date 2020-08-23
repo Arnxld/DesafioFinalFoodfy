@@ -39,17 +39,35 @@ module.exports = {
                 )VALUES ($1, $2, $3, $4)
                 RETURNING id, email
                 `
-                
+                if(data.seedPassword) {
+                    const values = [
+                        data.name,
+                        data.email,
+                        data.seedPassword,
+                        data.is_admin || false
+                    ]
+                }
                 // gerando uma senha aleatória
                 let randomPassword = Math.random().toString(36).slice(-5)
                 const passwordHash = await hash(randomPassword, 8)
                 
-                const values = [
+                let values = [
                     data.name,
                     data.email,
                     passwordHash,
                     data.is_admin || false
                 ]
+
+                if(data.seedPassword) {
+                    values = [
+                        data.name,
+                        data.email,
+                        data.seedPassword,
+                        data.is_admin || false
+                    ]
+                }
+
+                console.log("Senha do usuário: ", values[2])
                 
                 const results = await db.query(query, values)
                 

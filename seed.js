@@ -10,7 +10,7 @@ const { file } = require('./src/app/models/Chef')
 
 let usersIds = []
 let totalUsers = 5
-let totalRecipes = 10
+let totalRecipes = 40
 let totalChefs = 3
 
 async function createUsers() {
@@ -22,7 +22,7 @@ async function createUsers() {
             users.push({
                 name: faker.name.firstName(),
                 email: faker.internet.email(),
-                password,
+                seedPassword: password,
                 is_admin: random.boolean()
             })
         }
@@ -86,36 +86,6 @@ async function createRecipes() {
     const recipesIds = recipesResults.map(result => result.rows[0].id) // 10 ids de receitas
 
     return recipesIds
-
-    // let recipeFilesPromises = []
-
-    // for(recipe of recipesIds) {
-    //     let files = []
-
-    //     while(files.length < 3) {
-    //         files.push({
-    //             name: faker.image.image(),
-    //             path: `/public/images/recipePlaceholder.png`,
-    //         })
-    //     }
-        
-    //     let filesPromises = files.map(file => File.create(file))
-        
-    //     let filesPromisesResults = await Promise.all(filesPromises)
-        
-    //     let results = filesPromisesResults.map(result => result.rows)
-
-    //     let filesIds = []
-
-    //     for (fileId of results) {
-    //         filesIds.push(fileId[0].id)
-    //     }
-
-    //     recipeFilesPromises = filesIds.map(file => File.createAtRecipeFiles(recipe, file))
-
-    //     await Promise.all(recipeFilesPromises)
-    // }
-
 }
 
 async function createRecipeFiles() {
@@ -141,8 +111,6 @@ async function createRecipeFiles() {
         for(id of filesIds) {
             ids.push(id[0].id)
         }
-
-        console.log("Ids dos arquivos: ", ids)
         const recipeFilesPromises = ids.map(id => File.createAtRecipeFiles(id, recipeId))
 
         await Promise.all(recipeFilesPromises)
