@@ -35,46 +35,53 @@ module.exports = {
     },
 
     async search(req,res) {
-        let {filter, page, limit} = req.query
+        try {
+            let {filter, page, limit} = req.query
 
-        page = page || 1
-        limit = limit || 6
-        let offset = limit * (page - 1)
+            page = page || 1
+            limit = limit || 6
+            let offset = limit * (page - 1)
+            
+            const params = {
+                filter,
+                page,
+                limit,
+                offset
+            }
+    
+            let results = await User.recipesSearch(params)
+            let recipes = results.rows
+    
+    
+            const pagination = {
+                total: Math.ceil(recipes[0].total / limit),
+                page
+            }
+    
+            async function getImage(recipeId) {
+                let results = await Recipe.files(recipeId)
+                const filesId = results.rows.map(result => result.file_id)
+                let filesPromise = filesId.map(id => File.find(id))
+                results = await Promise.all(filesPromise)
+                let files = results.map(result => result.rows[0])
+                const filesURL = files.map(file => `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`)
+                return filesURL[0]
+            }
+    
+            const recipesPromise = recipes.map(async recipe => {
+                recipe.img = await getImage(recipe.id)
+                return recipe
+            })
+    
+    
+            lastRecipes = await Promise.all(recipesPromise)
+    
+            return res.render('users/search', {recipes: lastRecipes, filter, pagination})
+        }
+        catch(err) {
+            console.error(err)
+        }
         
-        const params = {
-            filter,
-            page,
-            limit,
-            offset
-        }
-
-        let results = await User.recipesSearch(params)
-        let recipes = results.rows
-
-        const pagination = {
-            total: Math.ceil(recipes[0].total / limit),
-            page
-        }
-
-        async function getImage(recipeId) {
-            let results = await Recipe.files(recipeId)
-            const filesId = results.rows.map(result => result.file_id)
-            let filesPromise = filesId.map(id => File.find(id))
-            results = await Promise.all(filesPromise)
-            let files = results.map(result => result.rows[0])
-            const filesURL = files.map(file => `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`)
-            return filesURL[0]
-        }
-
-        const recipesPromise = recipes.map(async recipe => {
-            recipe.img = await getImage(recipe.id)
-            return recipe
-        })
-
-
-        lastRecipes = await Promise.all(recipesPromise)
-
-        return res.render('users/search', {recipes: lastRecipes, filter, pagination})
         
     },
 
