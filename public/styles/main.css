@@ -930,3 +930,23 @@ form .item .avatar-preview img {
     line-height: 17px;
     cursor: pointer;
 }
+
+/* pagination */
+.cards.recipes {
+    min-height: 434px;
+}
+.pagination {
+    text-align: center;
+}
+
+.pagination a,
+.pagination span {
+    color: #6558c3;
+    text-decoration: none;
+    margin-right: 16px;
+}
+
+.pagination a:hover {
+    filter: brightness(0.3);
+    border-bottom: 1px solid #6558C3
+}

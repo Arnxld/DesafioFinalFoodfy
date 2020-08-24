@@ -20,19 +20,17 @@ module.exports = {
     recipesSearch(params) {
         const {filter, limit, offset} = params
 
-
-        return db.query(`
-            SELECT recipes.*, (
-                SELECT count(*) FROM recipes
-                WHERE recipes.title ILIKE '%${filter}%'
-            ) AS total, chefs.name AS chef_name
-            FROM recipes
-            LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
+        query = `SELECT recipes.*, (
+            SELECT count(*) FROM recipes
             WHERE recipes.title ILIKE '%${filter}%'
-            ORDER BY updated_at DESC
-            LIMIT ${limit} OFFSET ${offset}
-        `)
+        ) AS total, chefs.name AS chef_name
+        FROM recipes
+        LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
+        WHERE recipes.title ILIKE '%${filter}%'
+        ORDER BY updated_at DESC
+        LIMIT $1 OFFSET $2`
 
+        return db.query(query, [limit, offset])
     
     },
 

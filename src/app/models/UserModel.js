@@ -66,8 +66,6 @@ module.exports = {
                         data.is_admin || false
                     ]
                 }
-
-                console.log("Senha do usuário: ", values[2])
                 
                 const results = await db.query(query, values)
                 

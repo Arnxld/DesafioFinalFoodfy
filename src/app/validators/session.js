@@ -12,16 +12,9 @@ async function login(req, res, next) {
         user: req.body,
         Error: "Usuário não cadastrado."
     })
-
-    console.log(user.password)
-
-    console.log(password)
     hashPass = await bcryptjs.hash(password, 8)
-    console.log(hashPass)
-
     // verificar se a senha confere
     const passed = await compare(password, user.password)
-    console.log(passed)
 
     if(!passed) return res.render("admins/session/login", {
         user: req.body,
